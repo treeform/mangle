@@ -5,12 +5,11 @@ import
 
 const helper = @[1, 2, 3]
 
-test "stream and toSeq":
+test "Stream and toSeq":
     check: helper == helper.stream.toSeq
 
-test "multiple stream ok":
+test "Multiple stream ok":
     check: helper == helper.stream.stream.toSeq
-
 
 test "Real usage":
     check:
@@ -48,3 +47,9 @@ test "More complex types":
         vectors.stream
             .each(proc(vec: var Vector) = vec.y = 1)
             .reduce(`*`, (1, 1, 1)) == (12, 1, 18)
+
+test "Sorting":
+    check:
+        @[3,1,2].stream
+            .sort
+            .toSeq == @[1,2,3]
