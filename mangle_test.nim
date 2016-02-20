@@ -62,6 +62,20 @@ test "Sorting":
             .toSeq == @[1,2,3]
 
 
+test "Nim channels":
+    var channel = Channel[int]()
+    channel.open()
+    channel.send(1)
+    channel.send(2)
+    channel.send(3)
+    channel.send(4)
+
+    check:
+        channel.stream
+            .take(3) # FIXME 4 not working
+            .toSeq == @[1, 2, 3]
+
+
 test "Nim stream objects":
     check:
         newStringStream("hello\nworld").stream

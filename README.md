@@ -18,6 +18,3 @@ infinity()
 
 # Documentation
 [Generated nimdoc](https://htmlpreview.github.io/?https://raw.githubusercontent.com/baabelfish/mangle/master/mangle.html)
-
-# Todo
-- Support channels

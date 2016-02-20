@@ -1,4 +1,5 @@
 import
+    threadpool,
     algorithm,
     streams,
     future
@@ -12,6 +13,14 @@ template iterate[T](iterable: Iterable[T], body: expr): expr =
         var it {.inject.} = iterable()
         if finished(iterable): break
         body
+
+
+proc stream*[T](channel: var Channel[T]): iterator: T =
+    ## Creates an iterator from possible sources
+    var chptr = channel.addr
+    return iterator(): T =
+        while chptr[].peek() != -1:
+            yield chptr[].recv
 
 
 proc stream*(iterable: Stream): iterator: string =
