@@ -1,15 +1,19 @@
 import
     unittest,
+    streams,
     future,
     mangle
 
 const helper = @[1, 2, 3]
 
+
 test "Stream and toSeq":
     check: helper == helper.stream.toSeq
 
+
 test "Multiple stream ok":
     check: helper == helper.stream.stream.toSeq
+
 
 test "Real usage":
     check:
@@ -20,6 +24,7 @@ test "Real usage":
             .take(4)
             .toSeq == @[0, 2, 4, 6]
 
+
 test "Example":
     check:
         infinity()
@@ -27,6 +32,7 @@ test "Example":
             .filter((it) => it %% 2 == 0)
             .take(715517)
             .reduce((acc: int, it) => acc + it, 0) == 488424787335446984
+
 
 test "More complex types":
     type Vector = tuple[
@@ -48,8 +54,15 @@ test "More complex types":
             .each(proc(vec: var Vector) = vec.y = 1)
             .reduce(`*`, (1, 1, 1)) == (12, 1, 18)
 
+
 test "Sorting":
     check:
         @[3,1,2].stream
             .sort
             .toSeq == @[1,2,3]
+
+
+test "Nim stream objects":
+    check:
+        newStringStream("hello\nworld").stream
+            .toSeq == @["hello", "world"]

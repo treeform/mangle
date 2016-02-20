@@ -1,6 +1,8 @@
 Mangle [![Build Status](https://travis-ci.org/baabelfish/mangle.svg?branch=master)](https://travis-ci.org/baabelfish/mangle)
 ======
 
+> to injure severely, disfigure, or mutilate by cutting, slashing, or crushing
+
 Attempt at a streaming lib
 
 ```nim
@@ -16,3 +18,6 @@ infinity()
 
 # Documentation
 [Generated nimdoc](https://htmlpreview.github.io/?https://raw.githubusercontent.com/baabelfish/mangle/master/mangle.html)
+
+# Todo
+- Support channels
