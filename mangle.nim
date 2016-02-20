@@ -2,10 +2,10 @@ import
     future
 
 
-type Iterable*[T] = (iterator: T) | seq[T]
+type Iterable*[T] = (iterator: T) | seq[T] | openarray[T]
 
 
-template iterate*[T](iterable: Iterable[T], body: expr): expr =
+template iterate[T](iterable: Iterable[T], body: expr): expr =
     while true:
         let it {.inject.} = iterable()
         if finished(iterable): break
@@ -13,6 +13,7 @@ template iterate*[T](iterable: Iterable[T], body: expr): expr =
 
 
 proc stream*[T](iterable: Iterable[T]): iterator: T =
+    ## Creates an iterator from possible sources
     when type(iterable) is seq[T]:
         result = iterator(): T =
             for it in iterable:
@@ -22,6 +23,7 @@ proc stream*[T](iterable: Iterable[T]): iterator: T =
 
 
 proc infinity*(start = 0): iterator: int =
+    ## Returns an iterator starting from `start`
     return iterator: int {.closure.} =
         var idx: int = start
         while true:
@@ -29,32 +31,46 @@ proc infinity*(start = 0): iterator: int =
             idx.inc
 
 
-proc toSeq*[T](iterable: iterator: T): seq[T] =
+proc toSeq*[T](iterable: Iterable[T]): seq[T] =
+    ## Collects iterator into a seq
     result = @[];
     iterate iterable:
         result.add it
 
 
-proc map*[T, G](iterable: iterator: T, fn: (T) -> G): iterator: T =
+proc map*[T, G](iterable: Iterable[T], fn: (T) -> G): iterator: G =
+    ## Transforms single valuable in the stream
     return iterator: G {.closure.} =
         iterate iterable:
             yield fn(it)
 
 
-proc filter*[T](iterable: iterator: T, fn: (T) -> bool): iterator: T =
+proc filter*[T](iterable: Iterable[T], fn: (T) -> bool): iterator: T =
+    ## Filters elements stream by fn
     return iterator: T {.closure.} =
         iterate iterable:
             if fn(it):
                 yield it
 
 
-proc reduce*[T, G](iterable: iterator: T, fn: (G, T) -> G, acc: G): G =
+proc reject*[T](iterable: Iterable[T], fn: (T) -> bool): iterator: T =
+    ## Rejects elements in stream by fn
+    return iterator: T {.closure.} =
+        iterate iterable:
+            if not fn(it):
+                yield it
+
+
+proc reduce*[T, G](iterable: Iterable[T], fn: (G, T) -> G, acc: G): G =
+    ## Reduces stream with accumulator
+    ## ``acc`` initial accumulator value
     result = acc
     iterate iterable:
         result = fn(result, it)
 
 
-proc take*[T](iterable: iterator: T, amount: int): iterator: T =
+proc take*[T](iterable: Iterable[T], amount: int): iterator: T =
+    ## Takes ``amount`` of elements from the stream returnin a new iterator
     return iterator: T {.closure.} =
         var value = amount
         iterate iterable:
@@ -65,14 +81,16 @@ proc take*[T](iterable: iterator: T, amount: int): iterator: T =
                 yield it
 
 
-proc print*[T](iterable: iterator: T): iterator: T =
+proc print*[T](iterable: Iterable[T]): iterator: T =
+    ## Prints all passing values in the stream
     return iterator: T {.closure.} =
         iterate iterable:
             it.echo
             yield it
 
 
-proc tap*[T](iterable: iterator: T, fn: (T) -> T): iterator: T =
+proc tap*[T](iterable: Iterable[T], fn: (T) -> T): iterator: T =
+    ## Allows to check on the immutable alues in the stream
     return iterator: T {.closure.} =
         iterate iterable:
             discard fn(it)
