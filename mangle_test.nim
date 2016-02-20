@@ -28,3 +28,23 @@ test "Example":
             .filter((it) => it %% 2 == 0)
             .take(715517)
             .reduce((acc: int, it) => acc + it, 0) == 488424787335446984
+
+test "More complex types":
+    type Vector = tuple[
+        x, y, z: int]
+
+    proc `*`(a, b: Vector): Vector = (a.x * b.x, a.y * b.y, a.z * b.z)
+
+    proc `$`(self: Vector): string =
+        $self.x & ":" & $self.y & ":" & $self.z
+
+    let vectors: seq[Vector] = @[
+        (1, 1, 1),
+        (1, 2, 3),
+        (3, 2, 1),
+        (4, 5, 6)]
+
+    check:
+        vectors.stream
+            .each(proc(vec: var Vector) = vec.y = 1)
+            .reduce(`*`, (1, 1, 1)) == (12, 1, 18)

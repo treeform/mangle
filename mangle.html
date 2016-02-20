@@ -1188,8 +1188,10 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="take*[T](iterable: Iterable[T]; amount: int): iterator (): T"><wbr />take</a></li>
   <li><a class="reference" href="#print,Iterable[T]"
     title="print*[T](iterable: Iterable[T]): iterator (): T"><wbr />print</a></li>
+  <li><a class="reference" href="#each,Iterable[T],proc(T)"
+    title="each*[T](iterable: Iterable[var T]; fn: proc (it: var T)): iterator (): T"><wbr />each</a></li>
   <li><a class="reference" href="#tap,Iterable[T],"
-    title="tap*[T](iterable: Iterable[T]; fn: (T) -&gt; T): iterator (): T"><wbr />tap</a></li>
+    title="tap*[T](iterable: Iterable[T]; fn: (T) -&gt; void): iterator (): T"><wbr />tap</a></li>
 
   </ul>
 </li>
@@ -1262,7 +1264,12 @@ Takes <tt class="docutils literal"><span class="pre">amount</span></tt> of eleme
 Prints all passing values in the stream
 
 </dd>
-<dt id="tap"><a name="tap,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">tap</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="each"><a name="each,Iterable[T],proc(T)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">each</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">it</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dd>
+Allows manipulation of element in the stream
+
+</dd>
+<dt id="tap"><a name="tap,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">tap</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">void</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
 Allows to check on the immutable alues in the stream
 
@@ -1277,7 +1284,7 @@ Allows to check on the immutable alues in the stream
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2016-02-20 23:59:30 UTC</small>
+        <small>Made with Nim. Generated: 2016-02-21 00:18:24 UTC</small>
       </div>
     </div>
   </div>

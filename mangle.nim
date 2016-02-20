@@ -7,7 +7,7 @@ type Iterable*[T] = (iterator: T) | seq[T] | openarray[T]
 
 template iterate[T](iterable: Iterable[T], body: expr): expr =
     while true:
-        let it {.inject.} = iterable()
+        var it {.inject.} = iterable()
         if finished(iterable): break
         body
 
@@ -89,9 +89,17 @@ proc print*[T](iterable: Iterable[T]): iterator: T =
             yield it
 
 
-proc tap*[T](iterable: Iterable[T], fn: (T) -> T): iterator: T =
+proc each*[T](iterable: Iterable[var T], fn: proc(it: var T)): iterator: T =
+    ## Allows manipulation of element in the stream
+    return iterator: T {.closure.} =
+        iterate iterable:
+            fn(it)
+            yield it
+
+
+proc tap*[T](iterable: Iterable[T], fn: (T) -> void): iterator: T =
     ## Allows to check on the immutable alues in the stream
     return iterator: T {.closure.} =
         iterate iterable:
-            discard fn(it)
+            fn(it)
             yield it
