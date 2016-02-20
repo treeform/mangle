@@ -12,12 +12,6 @@ template iterate*[T](iterable: Iterable[T], body: expr): expr =
         body
 
 
-proc toSeq*[T](iterable: iterator: T): seq[T] =
-    result = @[];
-    iterate iterable:
-        result.add it
-
-
 proc stream*[T](iterable: Iterable[T]): iterator: T =
     when type(iterable) is seq[T]:
         result = iterator(): T =
@@ -35,11 +29,29 @@ proc infinity*(start = 0): iterator: int =
             idx.inc
 
 
+proc toSeq*[T](iterable: iterator: T): seq[T] =
+    result = @[];
+    iterate iterable:
+        result.add it
+
+
+proc map*[T, G](iterable: iterator: T, fn: (T) -> G): iterator: T =
+    return iterator: G {.closure.} =
+        iterate iterable:
+            yield fn(it)
+
+
 proc filter*[T](iterable: iterator: T, fn: (T) -> bool): iterator: T =
     return iterator: T {.closure.} =
         iterate iterable:
             if fn(it):
                 yield it
+
+
+proc reduce*[T, G](iterable: iterator: T, fn: (G, T) -> G, acc: G): G =
+    result = acc
+    iterate iterable:
+        result = fn(result, it)
 
 
 proc take*[T](iterable: iterator: T, amount: int): iterator: T =
@@ -51,12 +63,6 @@ proc take*[T](iterable: iterator: T, amount: int): iterator: T =
             else:
                 dec value
                 yield it
-
-
-proc reduce*[T, G](iterable: iterator: T, fn: (G, T) -> G, acc: G): G =
-    result = acc
-    iterate iterable:
-        result = fn(result, it)
 
 
 proc print*[T](iterable: iterator: T): iterator: T =
@@ -71,15 +77,3 @@ proc tap*[T](iterable: iterator: T, fn: (T) -> T): iterator: T =
         iterate iterable:
             discard fn(it)
             yield it
-
-
-proc map*[T, G](iterable: iterator: T, fn: (T) -> G): iterator: T =
-    return iterator: G {.closure.} =
-        iterate iterable:
-            yield fn(it)
-
-
-template mapIt*[T](iterable: iterator: T, body: expr): expr =
-    map(iterable, proc(itx: T): T =
-        let it {.inject.} = itx
-        body)

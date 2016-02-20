@@ -1,4 +1,4 @@
-Mangle
+Mangle [![Build Status](https://travis-ci.org/baabelfish/mangle.svg?branch=master)](https://travis-ci.org/baabelfish/mangle)
 ======
 
 Attempt at a streaming lib
@@ -11,5 +11,8 @@ infinity()
     .filter((it) => it %% 2 == 0)
     .take(715517)
     .reduce((acc: int, it) => acc + it, 0)
-    .echo # 488424787335446984
+    .echo == 488424787335446984
 ```
+
+# Documentation
+[Generated nimdoc](https://htmlpreview.github.io/?https://raw.githubusercontent.com/baabelfish/mangle/master/mangle.html)
