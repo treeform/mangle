@@ -1,128 +1,129 @@
 import
-    threadpool,
     algorithm,
     streams,
     future
 
 
-type Iterable*[T] = var (iterator: T) | var seq[T] | var openarray[T]
+type Infinite*[T] = object
+    it: iterator: T
+
+type Finite*[T] = object
+    it: iterator: T
+
+type Iterable*[T] = Infinite[T] | Finite[T]
 
 
 template iterate[T](iterable: Iterable[T], body: expr): expr =
     while true:
-        var it {.inject.} = iterable()
-        if finished(iterable): break
+        var it {.inject.} = iterable.it()
+        if finished(iterable.it): break
         body
 
 
-proc stream*[T](channel: var Channel[T]): iterator: T =
+proc stream*[T](channel: var Channel[T]): Finite[T] =
     ## Creates an iterator from possible sources
     var chptr = channel.addr
-    return iterator(): T =
+    result.it = iterator(): T =
         while chptr[].peek() != -1:
             yield chptr[].recv
 
 
-proc stream*(iterable: Stream): iterator: string =
+proc stream*(iterable: Stream): Finite[string] =
     ## Creates an iterator from possible sources
     var line = ""
-    return iterator(): string =
+    result.it = iterator(): string =
         while iterable.readLine(line):
             yield line
 
 
-proc stream*[T](iterable: Iterable[T]): iterator: T =
+proc stream*[T](iterable: seq[T]): Finite[T] =
     ## Creates an iterator from possible sources
-    when type(iterable) is seq[T]:
-        result = iterator(): T =
-            for it in iterable:
-                yield it
-    when type(iterable) is iterator: T:
-        iterable
+    result.it = iterator(): T =
+        for it in iterable:
+            yield it
 
 
-proc infinity*(start = 0): iterator: int =
+proc stream*[T](iterable: Iterable[T]): Finite[T] =
+    ## Creates an iterator from possible sources
+    iterable
+
+
+proc infinity*(start = 0): Infinite[int] =
     ## Returns an iterator starting from `start`
-    return iterator: int {.closure.} =
+    result.it = iterator: int {.closure.} =
         var idx: int = start
         while true:
             yield idx
             idx.inc
 
 
-proc collect*[T](iterable: Iterable[T]): seq[T] =
+proc collect*[T](iterable: Finite[T]): seq[T] =
     ## Collects iterator into a seq
     result = @[];
-    iterate iterable:
+    while true:
+        var it = iterable.it()
+        if finished(iterable.it): break
         result.add it
 
 
-proc sort*[T](iterable: Iterable[T], cmpfn: (T, T) -> int): iterator: T =
+proc sort*[T](iterable: Finite[T], cmpfn: (T, T) -> int): Finite[T] =
     ## Reads the stream into a seq, sorts it and returns an iterator
-    ## TODO: Compile time check for inf stream
     var values: seq[T] = @[];
     iterate iterable:
         values.add it
     algorithm.sort(values, cmpfn)
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         for it in values:
             yield it
 
 
-proc sort*[T](iterable: Iterable[T]): iterator: T =
+proc sort*[T](iterable: Finite[T]): Finite[T] =
     ## Reads the stream into a seq, sorts it and returns an iterator
-    ## TODO: Compile time check for inf stream
+    when iterable is Infinite[T]:
+        static: error("One does not simply sort infinity")
     var values: seq[T] = @[];
     iterate iterable:
         values.add it
     algorithm.sort(values, cmp[T])
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         for it in values:
             yield it
 
 
-proc each*[T](iterable: Iterable[var T], fn: proc(it: var T)): iterator: T =
-    ## Allows manipulation of element in the stream
-    return iterator: T {.closure.} =
-        iterate iterable:
-            fn(it)
-            yield it
-
-
-proc map*[T, G](iterable: Iterable[T], fn: (T) -> G): iterator: G =
+proc map*[T, G](iterable: Iterable[T], fn: (T) -> G): Finite[G] =
     ## Transforms single valuable in the stream
-    return iterator: G {.closure.} =
+    result.it = iterator: G {.closure.} =
         iterate iterable:
             yield fn(it)
 
 
-proc filter*[T](iterable: Iterable[T], val: T): iterator: T =
+proc filter*[T](iterable: Iterable[T], val: T): Finite[T] =
     ## Filters elements stream by fn
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             if it == val:
                 yield it
 
 
-proc filter*[T](iterable: Iterable[T], fn: (T) -> bool): iterator: T =
+proc filter*[T](iterable: Iterable[T], fn: (T) -> bool): Finite[T] =
     ## Filters elements stream by fn
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             if fn(it):
                 yield it
 
 
-proc reject*[T](iterable: Iterable[T], fn: (T) -> bool): iterator: T =
+proc reject*[T](iterable: Iterable[T], fn: (T) -> bool): Finite[T] =
     ## Rejects elements in stream by fn
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             if not fn(it):
                 yield it
 
 
-proc reject*[T](iterable: Iterable[T], val: T): iterator: T =
+proc reject*[T](iterable: Iterable[T], val: T): Finite[T] =
     ## Filters elements stream by fn
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             if not it == val:
                 yield it
@@ -136,9 +137,9 @@ proc reduce*[T, G](iterable: Iterable[T], fn: (G, T) -> G, acc: G): G =
         result = fn(result, it)
 
 
-proc take*[T](iterable: Iterable[T], amount: int): iterator: T =
+proc take*[T](iterable: Iterable[T], amount: int): Finite[T] =
     ## Takes ``amount`` of elements from the stream returnin a new iterator
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         var value = amount
         iterate iterable:
             if value == 0:
@@ -148,17 +149,17 @@ proc take*[T](iterable: Iterable[T], amount: int): iterator: T =
                 yield it
 
 
-proc print*[T](iterable: Iterable[T]): iterator: T =
+proc print*[T](iterable: Iterable[T]): Finite[T] =
     ## Prints all passing values in the stream
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             it.echo
             yield it
 
 
-proc tap*[T](iterable: Iterable[T], fn: (T) -> void): iterator: T =
+proc tap*[T](iterable: Iterable[T], fn: (T) -> void): Finite[T] =
     ## Allows to check on the immutable alues in the stream
-    return iterator: T {.closure.} =
+    result.it = iterator: T {.closure.} =
         iterate iterable:
             fn(it)
             yield it

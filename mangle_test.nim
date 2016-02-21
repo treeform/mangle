@@ -25,6 +25,12 @@ test "Real usage":
             .collect == @[0, 2, 4, 6]
 
 
+test "Infinity cannot be sorted or collected":
+    check:
+        not compiles(infinity().sort)
+        not compiles(infinity().collect)
+
+
 test "Example":
     check:
         infinity()
@@ -35,13 +41,9 @@ test "Example":
 
 
 test "More complex types":
-    type Vector = tuple[
-        x, y, z: int]
+    type Vector = tuple[x, y, z: int]
 
     proc `*`(a, b: Vector): Vector = (a.x * b.x, a.y * b.y, a.z * b.z)
-
-    proc `$`(self: Vector): string =
-        $self.x & ":" & $self.y & ":" & $self.z
 
     let vectors: seq[Vector] = @[
         (1, 1, 1),
@@ -51,7 +53,7 @@ test "More complex types":
 
     check:
         vectors.stream
-            .each(proc(vec: var Vector) = vec.y = 1)
+            .map((vec) => (vec.x, 1, vec.z))
             .reduce(`*`, (1, 1, 1)) == (12, 1, 18)
 
 

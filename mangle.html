@@ -1162,44 +1162,54 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#Iterable"
-    title="Iterable*[T] = var (iterator (): T) | var seq[T] | var openarray[T]"><wbr />Iterable</a></li>
+      <li><a class="reference" href="#Infinite"
+    title="Infinite*[T] = object
+  it: iterator (): T"><wbr />Infinite</a></li>
+  <li><a class="reference" href="#Finite"
+    title="Finite*[T] = object
+  it: iterator (): T"><wbr />Finite</a></li>
+  <li><a class="reference" href="#Iterable"
+    title="Iterable*[T] = Infinite[T] | Finite[T]"><wbr />Iterable</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#stream,Iterable[T]"
-    title="stream*[T](iterable: Iterable[T]): iterator (): T"><wbr />stream</a></li>
+      <li><a class="reference" href="#stream,Channel[T]"
+    title="stream*[T](channel: var Channel[T]): Finite[T]"><wbr />stream</a></li>
+  <li><a class="reference" href="#stream,Stream"
+    title="stream*(iterable: Stream): Finite[string]"><wbr />stream</a></li>
+  <li><a class="reference" href="#stream,seq[T]"
+    title="stream*[T](iterable: seq[T]): Finite[T]"><wbr />stream</a></li>
+  <li><a class="reference" href="#stream,Iterable[T]"
+    title="stream*[T](iterable: Iterable[T]): Finite[T]"><wbr />stream</a></li>
   <li><a class="reference" href="#infinity,"
-    title="infinity*(start = 0): iterator (): int"><wbr />infinity</a></li>
-  <li><a class="reference" href="#toSeq,Iterable[T]"
-    title="toSeq*[T](iterable: Iterable[T]): seq[T]"><wbr />to<wbr />Seq</a></li>
-  <li><a class="reference" href="#sort,Iterable[T],"
-    title="sort*[T](iterable: Iterable[T]; cmpfn: (T, T) -&gt; int): iterator (): T"><wbr />sort</a></li>
-  <li><a class="reference" href="#sort,Iterable[T]"
-    title="sort*[T](iterable: Iterable[T]): iterator (): T"><wbr />sort</a></li>
-  <li><a class="reference" href="#each,Iterable[T],proc(T)"
-    title="each*[T](iterable: Iterable[var T]; fn: proc (it: var T)): iterator (): T"><wbr />each</a></li>
+    title="infinity*(start = 0): Infinite[int]"><wbr />infinity</a></li>
+  <li><a class="reference" href="#collect,Finite[T]"
+    title="collect*[T](iterable: Finite[T]): seq[T]"><wbr />collect</a></li>
+  <li><a class="reference" href="#sort,Finite[T],"
+    title="sort*[T](iterable: Finite[T]; cmpfn: (T, T) -&gt; int): Finite[T]"><wbr />sort</a></li>
+  <li><a class="reference" href="#sort,Finite[T]"
+    title="sort*[T](iterable: Finite[T]): Finite[T]"><wbr />sort</a></li>
   <li><a class="reference" href="#map,Iterable[T],"
-    title="map*[T, G](iterable: Iterable[T]; fn: (T) -&gt; G): iterator (): G"><wbr />map</a></li>
+    title="map*[T, G](iterable: Iterable[T]; fn: (T) -&gt; G): Finite[G]"><wbr />map</a></li>
   <li><a class="reference" href="#filter,Iterable[T],T"
-    title="filter*[T](iterable: Iterable[T]; val: T): iterator (): T"><wbr />filter</a></li>
+    title="filter*[T](iterable: Iterable[T]; val: T): Finite[T]"><wbr />filter</a></li>
   <li><a class="reference" href="#filter,Iterable[T],"
-    title="filter*[T](iterable: Iterable[T]; fn: (T) -&gt; bool): iterator (): T"><wbr />filter</a></li>
+    title="filter*[T](iterable: Iterable[T]; fn: (T) -&gt; bool): Finite[T]"><wbr />filter</a></li>
   <li><a class="reference" href="#reject,Iterable[T],"
-    title="reject*[T](iterable: Iterable[T]; fn: (T) -&gt; bool): iterator (): T"><wbr />reject</a></li>
+    title="reject*[T](iterable: Iterable[T]; fn: (T) -&gt; bool): Finite[T]"><wbr />reject</a></li>
   <li><a class="reference" href="#reject,Iterable[T],T"
-    title="reject*[T](iterable: Iterable[T]; val: T): iterator (): T"><wbr />reject</a></li>
+    title="reject*[T](iterable: Iterable[T]; val: T): Finite[T]"><wbr />reject</a></li>
   <li><a class="reference" href="#reduce,Iterable[T],,G"
     title="reduce*[T, G](iterable: Iterable[T]; fn: (G, T) -&gt; G; acc: G): G"><wbr />reduce</a></li>
   <li><a class="reference" href="#take,Iterable[T],int"
-    title="take*[T](iterable: Iterable[T]; amount: int): iterator (): T"><wbr />take</a></li>
+    title="take*[T](iterable: Iterable[T]; amount: int): Finite[T]"><wbr />take</a></li>
   <li><a class="reference" href="#print,Iterable[T]"
-    title="print*[T](iterable: Iterable[T]): iterator (): T"><wbr />print</a></li>
+    title="print*[T](iterable: Iterable[T]): Finite[T]"><wbr />print</a></li>
   <li><a class="reference" href="#tap,Iterable[T],"
-    title="tap*[T](iterable: Iterable[T]; fn: (T) -&gt; void): iterator (): T"><wbr />tap</a></li>
+    title="tap*[T](iterable: Iterable[T]; fn: (T) -&gt; void): Finite[T]"><wbr />tap</a></li>
   <li><a class="reference" href="#reverse,Iterable[T]"
     title="reverse*[T](iterable: Iterable[T]): iterator (): T"><wbr />reverse</a></li>
   <li><a class="reference" href="#unique,Iterable[T]"
@@ -1232,12 +1242,26 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="algorithm.html">algorithm</a>, <a class="reference external" href="future.html">future</a>
+<a class="reference external" href="algorithm.html">algorithm</a>, <a class="reference external" href="streams.html">streams</a>, <a class="reference external" href="future.html">future</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<dt id="Iterable"><a name="Iterable"></a><pre><span class="Identifier">Iterable</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">var</span> <span class="Other">(</span><span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">|</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Operator">|</span> <span class="Keyword">var</span> <span class="Identifier">openarray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dt id="Infinite"><a name="Infinite"></a><pre><span class="Identifier">Infinite</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">it</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span>
+</pre></dt>
+<dd>
+
+
+</dd>
+<dt id="Finite"><a name="Finite"></a><pre><span class="Identifier">Finite</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">it</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span>
+</pre></dt>
+<dd>
+
+
+</dd>
+<dt id="Iterable"><a name="Iterable"></a><pre><span class="Identifier">Iterable</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">=</span> <span class="Identifier">Infinite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Operator">|</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 
 
@@ -1247,57 +1271,67 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<dt id="stream"><a name="stream,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="stream"><a name="stream,Channel[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">channel</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">Channel</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Creates an iterator from possible sources
 
 </dd>
-<dt id="infinity"><a name="infinity,"></a><pre><span class="Keyword">proc</span> <span class="Identifier">infinity</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">start</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span></pre></dt>
+<dt id="stream"><a name="stream,Stream"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Stream</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span></pre></dt>
+<dd>
+Creates an iterator from possible sources
+
+</dd>
+<dt id="stream"><a name="stream,seq[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+Creates an iterator from possible sources
+
+</dd>
+<dt id="stream"><a name="stream,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+Creates an iterator from possible sources
+
+</dd>
+<dt id="infinity"><a name="infinity,"></a><pre><span class="Keyword">proc</span> <span class="Identifier">infinity</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">start</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Infinite</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span></pre></dt>
 <dd>
 Returns an iterator starting from <cite>start</cite>
 
 </dd>
-<dt id="toSeq"><a name="toSeq,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">toSeq</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dt id="collect"><a name="collect,Finite[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">collect</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Collects iterator into a seq
 
 </dd>
-<dt id="sort"><a name="sort,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sort</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cmpfn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="sort"><a name="sort,Finite[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sort</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cmpfn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
-Reads the stream into a seq, sorts it and returns an iterator TODO: Compile time check for inf stream
+Reads the stream into a seq, sorts it and returns an iterator
 
 </dd>
-<dt id="sort"><a name="sort,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sort</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="sort"><a name="sort,Finite[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sort</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
-Reads the stream into a seq, sorts it and returns an iterator TODO: Compile time check for inf stream
+Reads the stream into a seq, sorts it and returns an iterator
 
 </dd>
-<dt id="each"><a name="each,Iterable[T],proc(T)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">each</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">it</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
-<dd>
-Allows manipulation of element in the stream
-
-</dd>
-<dt id="map"><a name="map,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">map</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">G</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">G</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">G</span></pre></dt>
+<dt id="map"><a name="map,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">map</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">G</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">G</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">G</span><span class="Other">]</span></pre></dt>
 <dd>
 Transforms single valuable in the stream
 
 </dd>
-<dt id="filter"><a name="filter,Iterable[T],T"></a><pre><span class="Keyword">proc</span> <span class="Identifier">filter</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="filter"><a name="filter,Iterable[T],T"></a><pre><span class="Keyword">proc</span> <span class="Identifier">filter</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Filters elements stream by fn
 
 </dd>
-<dt id="filter"><a name="filter,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">filter</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="filter"><a name="filter,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">filter</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Filters elements stream by fn
 
 </dd>
-<dt id="reject"><a name="reject,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">reject</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="reject"><a name="reject,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">reject</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Rejects elements in stream by fn
 
 </dd>
-<dt id="reject"><a name="reject,Iterable[T],T"></a><pre><span class="Keyword">proc</span> <span class="Identifier">reject</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="reject"><a name="reject,Iterable[T],T"></a><pre><span class="Keyword">proc</span> <span class="Identifier">reject</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Filters elements stream by fn
 
@@ -1307,17 +1341,17 @@ Filters elements stream by fn
 Reduces stream with accumulator <tt class="docutils literal"><span class="pre">acc</span></tt> initial accumulator value
 
 </dd>
-<dt id="take"><a name="take,Iterable[T],int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">take</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">amount</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="take"><a name="take,Iterable[T],int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">take</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">amount</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Takes <tt class="docutils literal"><span class="pre">amount</span></tt> of elements from the stream returnin a new iterator
 
 </dd>
-<dt id="print"><a name="print,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">print</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="print"><a name="print,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">print</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Prints all passing values in the stream
 
 </dd>
-<dt id="tap"><a name="tap,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">tap</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">void</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="tap"><a name="tap,Iterable[T],"></a><pre><span class="Keyword">proc</span> <span class="Identifier">tap</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">fn</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">T</span><span class="Other">)</span> <span class="Operator">-&gt;</span> <span class="Identifier">void</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Finite</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
 <dd>
 Allows to check on the immutable alues in the stream
 
@@ -1382,7 +1416,7 @@ Allows to check on the immutable alues in the stream
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2016-02-21 01:07:53 UTC</small>
+        <small>Made with Nim. Generated: 2016-02-21 14:31:07 UTC</small>
       </div>
     </div>
   </div>
