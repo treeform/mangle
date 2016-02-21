@@ -82,3 +82,4 @@ test "Nim stream objects":
     check:
         newStringStream("hello\nworld").stream
             .collect == @["hello", "world"]
+
