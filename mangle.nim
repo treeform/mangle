@@ -129,7 +129,7 @@ proc reject*[T](iterable: Iterable[T], val: T): Finite[T] =
                 yield it
 
 
-proc reduce*[T, G](iterable: Iterable[T], fn: (G, T) -> G, acc: G): G =
+proc reduce*[T, G](iterable: Iterable[T], acc: G, fn: (G, T) -> G): G =
     ## Reduces stream with accumulator
     ## ``acc`` initial accumulator value
     result = acc

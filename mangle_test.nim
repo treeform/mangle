@@ -37,7 +37,7 @@ test "Example":
             .map((it) => it * it)
             .filter((it) => it %% 2 == 0)
             .take(715517)
-            .reduce((acc: int, it) => acc + it, 0) == 488424787335446984
+            .reduce(0, (acc, it) => acc + it) == 488424787335446984
 
 
 test "More complex types":
@@ -54,7 +54,7 @@ test "More complex types":
     check:
         vectors.stream
             .map((vec) => (vec.x, 1, vec.z))
-            .reduce(`*`, (1, 1, 1)) == (12, 1, 18)
+            .reduce((1, 1, 1), `*`) == (12, 1, 18)
 
 
 test "Sorting":
