@@ -12,24 +12,40 @@ install_nim() {
     cd ..
 }
 
-
-if [[ ! -d "tmp" ]]; then
-    mkdir tmp
-    cd tmp
-
-    echo "Installing nim"
-    install_nim
-
+install_nimble() {
+    git clone https://github.com/nim-lang/nimble.git
+    cd nimble
+    git clone -b v0.13.0 --depth 1 https://github.com/nim-lang/nim vendor/nim
+    nim c -r src/nimble
+    export PATH=$PATH:$PWD/src
     cd ..
-fi
+}
+
+
+echo "Installing nim"
+install_nim
+
+echo "Installing nimble"
+install_nimble
+
+git clone https://github.com/ivankoster/nimbench 
+
+nimble install -y strfmt
 
 export PATH=$PATH:$current/tmp/nim/bin
+export PATH=$PATH:$current/nimble/src
 
 echo "================================================================================"
 
 echo -e "\nNim:"
 nim --version
 
-echo "================================================================================"
+echo -e "\nNimble:"
+nimble --version
 
-nim c -r mangle_test.nim
+nim c --threads:on mangle_test.nim
+nim c --threads:on -d:release mangle_bench.nim
+
+echo "================================================================================"
+./mangle_test
+./mangle_bench
