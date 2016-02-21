@@ -7,12 +7,12 @@ import
 const helper = @[1, 2, 3]
 
 
-test "Stream and toSeq":
-    check: helper == helper.stream.toSeq
+test "Stream and collect":
+    check: helper == helper.stream.collect
 
 
 test "Multiple stream ok":
-    check: helper == helper.stream.stream.toSeq
+    check: helper == helper.stream.stream.collect
 
 
 test "Real usage":
@@ -22,7 +22,7 @@ test "Real usage":
                 let x = 2
                 it * x)
             .take(4)
-            .toSeq == @[0, 2, 4, 6]
+            .collect == @[0, 2, 4, 6]
 
 
 test "Example":
@@ -59,7 +59,7 @@ test "Sorting":
     check:
         @[3,1,2].stream
             .sort
-            .toSeq == @[1,2,3]
+            .collect == @[1,2,3]
 
 
 test "Nim channels":
@@ -73,10 +73,10 @@ test "Nim channels":
     check:
         channel.stream
             .take(3) # FIXME 4 not working
-            .toSeq == @[1, 2, 3]
+            .collect == @[1, 2, 3]
 
 
 test "Nim stream objects":
     check:
         newStringStream("hello\nworld").stream
-            .toSeq == @["hello", "world"]
+            .collect == @["hello", "world"]

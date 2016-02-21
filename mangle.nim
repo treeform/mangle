@@ -50,7 +50,7 @@ proc infinity*(start = 0): iterator: int =
             idx.inc
 
 
-proc toSeq*[T](iterable: Iterable[T]): seq[T] =
+proc collect*[T](iterable: Iterable[T]): seq[T] =
     ## Collects iterator into a seq
     result = @[];
     iterate iterable:
