@@ -15,12 +15,6 @@ benchRelative(basicMangle, m):
         .collect
 
 
-bench(reduceReal, m):
-    var sum = 0
-    for v in 0..m:
-        sum += v
-    doNotOptimizeAway(sum)
-
 bench(reduceControl, m):
     var d: seq[int] = @[]
     for v in 0..m:
@@ -34,6 +28,12 @@ benchRelative(reduceMangle, m):
     discard infinity()
         .take(m)
         .reduce(0, (acc, val) => acc + val)
+
+benchRelative(reduceReal, m):
+    var sum = 1
+    for v in 0..m:
+        sum += v
+    doNotOptimizeAway(sum)
 
 
 bench(filteringControl, m):

@@ -25,10 +25,22 @@ test "Real usage":
             .collect == @[0, 2, 4, 6]
 
 
-test "Infinity cannot be sorted or collected":
+# test "Infinity cannot be sorted or collected":
+#     check:
+#         not compiles(infinity().sort)
+#         not compiles(infinity().collect)
+
+
+test "zip":
     check:
-        not compiles(infinity().sort)
-        not compiles(infinity().collect)
+        infinity().zip(infinity()
+                .map((it) => it * it))
+            .take(4)
+            .collect == @[
+                (0, 0),
+                (1, 1),
+                (2, 4),
+                (3, 9)]
 
 
 test "Example":
