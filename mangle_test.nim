@@ -26,40 +26,42 @@ test "generator":
             .collect == @[0, 0, 1, 1]
 
 
-test "Real usage":
-    check:
-        infinity()
-            .map(proc(it: auto): auto =
-                let x = 2
-                it * x)
-            .take(4)
-            .collect == @[0, 2, 4, 6]
-
-
 test "head":
     check:
-        infinity().head() == 0
+        infinity().head == 0
 
 
 test "tail":
     check:
         infinity()
-            .tail()
+            .tail
             .take(1)
-            .head() == 1
+            .head == 1
 
 
-# test "map":
-#     check:
-#         @[1f, 2f].stream()
-#             .map(int)
-#             .collect == @[1,2,3]
+test "map":
+    check:
+        @[1f, 2f, 3f].stream()
+            .map((x) => x * 2)
+            .map(int)
+            .mapIt(it * 2)
+            .filterIt(it != 8)
+            .sortIt(cmp(ita, itb))
+            .collect == @[4,12]
+
+
+test "reduce":
+    check:
+        @[1,1,2,3,2]
+            .stream
+            .reduceIt(0, acc + it) == 9
 
 
 test "unique":
     check:
-        @[1,1,2,3,2].stream()
-            .unique()
+        @[1,1,2,3,2]
+            .stream
+            .unique
             .collect == @[1,2,3]
 
 
@@ -77,6 +79,10 @@ test "some":
             .drop(3)
             .take(999)
             .some((x) => x == 666) == true
+        infinity()
+            .drop(3)
+            .take(999)
+            .someIt(it == 666) == true
 
 
 test "all":
@@ -91,7 +97,7 @@ test "reverse":
     check:
         infinity()
             .take(3)
-            .reverse()
+            .reverse
             .collect == @[2,1,0]
 
 
@@ -119,13 +125,24 @@ test "Example":
     check:
         infinity()
             .drop(1337)
+            .mapIt(it * it)
+            .filterIt(it %% 2 == 0)
+            .take(9999)
+            .concat(infinity()
+                .mapIt(it * 2)
+                .take(42))
+            .unique
+            .reduceIt(0, acc + it) == 1618153796826
+
+        infinity()
+            .drop(1337)
             .map((it) => it * it)
             .filter((it) => it %% 2 == 0)
             .take(9999)
             .concat(infinity()
                 .map((it) => it * 2)
                 .take(42))
-            .unique()
+            .unique
             .reduce(0, (acc, it) => acc + it) == 1618153796826
 
 
@@ -146,7 +163,7 @@ test "More complex types":
             .reduce((1, 1, 1), `*`) == (12, 1, 18)
 
 
-test "Sorting":
+test "sort":
     check:
         @[3,1,2].stream
             .sort

@@ -19,6 +19,19 @@ infinity()
     .unique()
     .reduce(0, (acc, it) => acc + it)
     .echo # == 1618153795104
+
+# Or
+
+infinity()
+    .drop(1337)
+    .mapIt(it * it)
+    .filterIt(it %% 2 == 0)
+    .take(9999)
+    .concat(infinity()
+        .mapIt(it * 2)
+        .take(42))
+    .unique
+    .reduceIt(0, acc + it) == 1618153796826
 ```
 
 # Documentation

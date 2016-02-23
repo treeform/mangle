@@ -94,10 +94,14 @@ proc sort*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
         for it in values: yield it
 
 
-# proc map*[T](iterable: Iterable[T], t: typedesc): Iterable[t] {.inline.} =
-#     ## Transforms single valuable in the stream
-#     result.it = iterator: t {.closure.} =
-#         iterate iterable: yield (t.type)it
+proc convert[T, G](x: T): G = x.G
+
+
+proc map*[T](iterable: Iterable[T], G: typedesc): Iterable[G] {.inline.} =
+    ## Transforms the type
+    result.it = iterator: G {.closure.} =
+        iterate iterable:
+            yield (convert[T, G](it))
 
 
 proc map*[T, G](iterable: Iterable[T], op: proc(a: T): G {.closure.}): Iterable[G] {.inline.} =
@@ -238,5 +242,45 @@ proc unique*[T](iterable: Iterable[T]): Iterable[T] =
             else: yield it
 
 
-# proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-# proc groupBy*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+template templateImpl(name, iterable, body: expr): expr {.immediate.} =
+    name(iterable, proc(itx: auto): auto =
+        let it {.inject.} = itx
+        body)
+
+
+template mapIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of map
+    ## ``mapIt(it * 2)`` expands to ``map((it) => it * 2)``
+    templateImpl(map, iterable, body)
+
+template filterIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of filter
+    templateImpl(filter, iterable, body)
+
+template rejectIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of reject
+    templateImpl(reject, iterable, body)
+
+template allIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of all
+    templateImpl(all, iterable, body)
+
+template someIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of some
+    templateImpl(some, iterable, body)
+
+template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
+    ## Iterator version of reduce
+    ## ``.reduceIt(0, acc + it)``
+    reduce(iterable, initial, (proc(accx: auto, itx: auto): auto =
+        let acc {.inject.} = accx
+        let it {.inject.} = itx
+        body))
+
+template sortIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of sort
+    ## ``.sortIt(cmp(ita, itb))``
+    sort(iterable, proc(itax, itbx: auto): int =
+        let ita {.inject.} = itax
+        let itb {.inject.} = itbx
+        body)
