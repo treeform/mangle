@@ -4,15 +4,13 @@ import
     future,
     mangle
 
-const helper = @[1, 2, 3]
 
-
-test "Stream and collect":
-    check: helper == helper.stream.collect
-
-
-test "Multiple stream ok":
-    check: helper == helper.stream.stream.collect
+test "stream":
+    const helper = @[1, 2, 3]
+    check:
+        stream(1..5).collect == @[1,2,3,4,5]
+        helper == helper.stream.collect
+        helper == helper.stream.stream.collect
 
 
 test "generator":

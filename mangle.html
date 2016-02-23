@@ -1183,6 +1183,8 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="stream*[T](iterable: seq[T]): Iterable[T]"><wbr />stream</a></li>
   <li><a class="reference" href="#stream,Iterable[T]"
     title="stream*[T](iterable: Iterable[T]): Iterable[T]"><wbr />stream</a></li>
+  <li><a class="reference" href="#stream,Slice[T]"
+    title="stream*[T](slice: Slice[T]): Iterable[T]"><wbr />stream</a></li>
   <li><a class="reference" href="#infinity,"
     title="infinity*(start = 0): Iterable[int]"><wbr />infinity</a></li>
   <li><a class="reference" href="#collect,Iterable[T]"
@@ -1213,6 +1215,8 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="tap*[T](iterable: Iterable[T]; op: proc (a: T)): Iterable[T]"><wbr />tap</a></li>
   <li><a class="reference" href="#zip,Iterable[A],Iterable[B]"
     title="zip*[A, B](a: Iterable[A]; b: Iterable[B]): Iterable[(A, B)]"><wbr />zip</a></li>
+  <li><a class="reference" href="#drop,Iterable[T],proc(T)"
+    title="drop*[T](iterable: Iterable[T]; pred: proc (x: T): bool): Iterable[T]"><wbr />drop</a></li>
   <li><a class="reference" href="#drop,Iterable[T],int"
     title="drop*[T](iterable: Iterable[T]; amount: int): Iterable[T]"><wbr />drop</a></li>
   <li><a class="reference" href="#reverse,Iterable[T]"
@@ -1245,6 +1249,8 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="allIt*(iterable, body: expr): expr"><wbr />all<wbr />It</a></li>
   <li><a class="reference" href="#someIt.t,expr,expr"
     title="someIt*(iterable, body: expr): expr"><wbr />some<wbr />It</a></li>
+  <li><a class="reference" href="#dropIt.t,expr,expr"
+    title="dropIt*(iterable, body: expr): expr"><wbr />drop<wbr />It</a></li>
   <li><a class="reference" href="#reduceIt.t,expr,expr,expr"
     title="reduceIt*(iterable, initial, body: expr): expr"><wbr />reduce<wbr />It</a></li>
   <li><a class="reference" href="#sortIt.t,expr,expr"
@@ -1304,6 +1310,11 @@ Creates an iterator from possible sources
 
 </dd>
 <dt id="stream"><a name="stream,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+Creates an iterator from possible sources
+
+</dd>
+<dt id="stream"><a name="stream,Slice[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">stream</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">slice</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 Creates an iterator from possible sources
 
@@ -1387,6 +1398,11 @@ Allows to check on the immutable alues in the stream
 
 
 </dd>
+<dt id="drop"><a name="drop,Iterable[T],proc(T)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">drop</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">pred</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+Drops while predicate is truthful
+
+</dd>
 <dt id="drop"><a name="drop,Iterable[T],int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">drop</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">amount</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 Drops <tt class="docutils literal"><span class="pre">amount</span></tt> from the iterable
@@ -1457,6 +1473,11 @@ Iterator version of all
 Iterator version of some
 
 </dd>
+<dt id="dropIt"><a name="dropIt.t,expr,expr"></a><pre><span class="Keyword">template</span> <span class="Identifier">dropIt</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">expr</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span> <span class="Other">{.</span><span class="Identifier">immediate</span><span class="Other">.}</span></pre></dt>
+<dd>
+Iterator version of some
+
+</dd>
 <dt id="reduceIt"><a name="reduceIt.t,expr,expr,expr"></a><pre><span class="Keyword">template</span> <span class="Identifier">reduceIt</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">,</span> <span class="Identifier">initial</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">expr</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span> <span class="Other">{.</span><span class="Identifier">immediate</span><span class="Other">.}</span></pre></dt>
 <dd>
 Iterator version of reduce <tt class="docutils literal"><span class="pre">.reduceIt(0, acc + it)</span></tt>
@@ -1477,7 +1498,7 @@ Iterator version of sort <tt class="docutils literal"><span class="pre">.sortIt(
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2016-02-23 23:35:25 UTC</small>
+        <small>Made with Nim. Generated: 2016-02-24 00:05:56 UTC</small>
       </div>
     </div>
   </div>

@@ -56,6 +56,13 @@ proc stream*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
     iterable
 
 
+proc stream*[T](slice: Slice[T]): Iterable[T] {.inline.} =
+    ## Creates an iterator from possible sources
+    result.it = iterator(): T =
+        for idx in slice.a..slice.b:
+            yield idx
+
+
 proc infinity*(start = 0): Iterable[int] {.inline.} =
     ## Returns an iterator starting from `start`
     result.it = iterator: int {.closure.} =
@@ -297,3 +304,9 @@ template sortIt*(iterable, body: expr): expr {.immediate.} =
         let ita {.inject.} = itax
         let itb {.inject.} = itbx
         body)
+
+
+# proc fill*[T, G](iterable: Iterable[T], op: proc(x: T): G): Iterable[G] =
+# proc fill*[T, G](iterable: Iterable[T], op: proc(x: T): G, start, stop: int): Iterable[G] =
+# proc indexOf*[T](iterable: Iterable[T], pred: proc(x: T): bool): int =
+# proc indexOf*[T](iterable: Iterable[T], x: T): int =
