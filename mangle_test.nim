@@ -100,10 +100,15 @@ test "zip":
 test "Example":
     check:
         infinity()
+            .drop(1337)
+            .concat(infinity()
+                .map((it) => it * 2)
+                .take(42))
             .map((it) => it * it)
             .filter((it) => it %% 2 == 0)
-            .take(715517)
-            .reduce(0, (acc, it) => acc + it) == 488424787335446984
+            .unique()
+            .take(9999)
+            .reduce(0, (acc, it) => acc + it) == 1618153795104
 
 
 test "More complex types":
