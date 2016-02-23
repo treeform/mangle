@@ -4,17 +4,8 @@ import
     streams
 
 
-# type Infinite*[T] = object
-#     it: iterator: T
-
-# type Finite*[T] = object
-#     it: iterator: T
-
-# type Iterable*[T] = Infinite[T] | Finite[T]
-
 type
     Iterable*[T] = object
-        isInfinite: bool
         it: iterator: T
 
 
@@ -52,7 +43,6 @@ proc stream*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
 
 proc infinity*(start = 0): Iterable[int] {.inline.} =
     ## Returns an iterator starting from `start`
-    result.isInfinite = true
     result.it = iterator: int {.closure.} =
         var idx: int = start
         while true:
@@ -62,7 +52,6 @@ proc infinity*(start = 0): Iterable[int] {.inline.} =
 
 proc collect*[T](iterable: Iterable[T]): seq[T] {.inline.} =
     ## Collects iterator into a seq
-    assert(not iterable.isInfinite)
     result = @[];
     while true:
         var it = iterable.it()
@@ -72,7 +61,6 @@ proc collect*[T](iterable: Iterable[T]): seq[T] {.inline.} =
 
 proc sort*[T](iterable: Iterable[T], cmpfn: proc(a, b: T): int {.closure.}): Iterable[T] {.inline.} =
     ## Reads the stream into a seq, sorts it and returns an iterator
-    assert iterable.isInfinite == false
     var values: seq[T] = @[];
     iterate iterable:
         values.add it
@@ -84,7 +72,6 @@ proc sort*[T](iterable: Iterable[T], cmpfn: proc(a, b: T): int {.closure.}): Ite
 
 proc sort*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
     ## Reads the stream into a seq, sorts it and returns an iterator
-    assert iterable.isInfinite == false
     var values: seq[T] = @[];
     iterate iterable:
         values.add it
@@ -182,7 +169,6 @@ proc drop*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
 
 proc reverse*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
     ## Reverses all in seq
-    assert iterable.isInfinite == false
     var values: seq[T] = @[];
     iterate iterable: values.add it
     algorithm.reverse(values)
@@ -204,7 +190,6 @@ proc tail*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
 
 proc all*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
     ## Checks that all elements in iterable satisfy predicate
-    assert iterable.isInfinite == false
     iterate iterable:
         if not pred(it): return false
     return true
@@ -212,7 +197,6 @@ proc all*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
 
 proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
     ## Checks that some elements in iterable satisfy predicate
-    assert iterable.isInfinite == false
     iterate iterable:
         if pred(it): return true
     return false 
@@ -220,7 +204,6 @@ proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
 proc concat*[T](a, b: Iterable[T]): Iterable[T] {.inline.} =
     ## Concats two iterables
     ## Nim is unable to capture varargs so this will have to do
-    assert a.isInfinite == false
     result.it = iterator: T {.closure.} =
         iterate a: yield it
         iterate b: yield it
