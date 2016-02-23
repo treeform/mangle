@@ -5,24 +5,24 @@ import
     mangle
 
 
-test "stream":
+test "mangle":
     const helper = @[1, 2, 3]
     check:
-        stream(1..5).collect == @[1,2,3,4,5]
-        helper == helper.stream.collect
-        helper == helper.stream.stream.collect
+        mangle(1..5).collect == @[1,2,3,4,5]
+        helper == helper.mangle.collect
+        helper == helper.mangle.mangle.collect
 
 
-test "generator":
+test "generate":
     check:
-        stream(() => 1)
+        generate(() => 1)
             .take(3)
             .collect == @[1, 1, 1]
-        stream((idx) => idx / 2)
+
+        generate((idx) => idx / 2)
             .map((it) => it.int)
             .take(4)
             .collect == @[0, 0, 1, 1]
-
 
 test "head":
     check:
@@ -39,7 +39,7 @@ test "tail":
 
 test "map":
     check:
-        @[1f, 2f, 3f].stream()
+        @[1f, 2f, 3f].mangle()
             .map((x) => x * 2)
             .map(int)
             .mapIt(it * 2)
@@ -51,14 +51,14 @@ test "map":
 test "reduce":
     check:
         @[1,1,2,3,2]
-            .stream
+            .mangle
             .reduceIt(0, acc + it) == 9
 
 
 test "unique":
     check:
         @[1,1,2,3,2]
-            .stream
+            .mangle
             .unique
             .collect == @[1,2,3]
 
@@ -161,14 +161,14 @@ test "More complex types":
         (4, 5, 6)]
 
     check:
-        vectors.stream
+        vectors.mangle
             .map((vec) => (vec.x, 1, vec.z))
             .reduce((1, 1, 1), `*`) == (12, 1, 18)
 
 
 test "sort":
     check:
-        @[3,1,2].stream
+        @[3,1,2].mangle
             .sort
             .collect == @[1,2,3]
 
@@ -182,13 +182,13 @@ test "Nim channels":
     channel.send(4)
 
     check:
-        channel.stream
+        channel.mangle
             .take(3) # FIXME 4 not working
             .collect == @[1, 2, 3]
 
 
-test "Nim stream objects":
+test "Nim mangle objects":
     check:
-        newStringStream("hello\nworld").stream
+        newStringStream("hello\nworld").mangle
             .collect == @["hello", "world"]
 

@@ -16,27 +16,27 @@ template iterate[T](iterable: Iterable[T], body: expr): expr =
         body
 
 
-proc stream*[T](channel: var Channel[T]): Iterable[T] {.inline.} =
+proc mangle*[T](channel: var Channel[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     var chptr = channel.addr
     result.it = iterator(): T =
         while chptr[].peek() != -1: yield chptr[].recv
 
 
-proc stream*(iterable: Stream): Iterable[string] {.inline.} =
+proc mangle*(iterable: Stream): Iterable[string] {.inline.} =
     ## Creates an iterator from possible sources
     var line = ""
     result.it = iterator(): string =
         while iterable.readLine(line): yield line
 
 
-proc stream*[T](generator: proc(): T): Iterable[T] {.inline.} =
+proc generate*[T](generator: proc(): T): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     result.it = iterator(): T =
         while true: yield generator()
 
 
-proc stream*[T](generator: proc(idx: int): T): Iterable[T] {.inline.} =
+proc generate*[T](generator: proc(idx: int): T): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     var idx = 0
     result.it = iterator(): T =
@@ -45,18 +45,18 @@ proc stream*[T](generator: proc(idx: int): T): Iterable[T] {.inline.} =
             inc idx
 
 
-proc stream*[T](iterable: seq[T]): Iterable[T] {.inline.} =
+proc mangle*[T](iterable: seq[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     result.it = iterator(): T =
         for it in iterable: yield it
 
 
-proc stream*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
+proc mangle*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     iterable
 
 
-proc stream*[T](slice: Slice[T]): Iterable[T] {.inline.} =
+proc mangle*[T](slice: Slice[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     result.it = iterator(): T =
         for idx in slice.a..slice.b:
@@ -310,3 +310,4 @@ template sortIt*(iterable, body: expr): expr {.immediate.} =
 # proc fill*[T, G](iterable: Iterable[T], op: proc(x: T): G, start, stop: int): Iterable[G] =
 # proc indexOf*[T](iterable: Iterable[T], pred: proc(x: T): bool): int =
 # proc indexOf*[T](iterable: Iterable[T], x: T): int =
+
