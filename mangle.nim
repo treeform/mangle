@@ -1,4 +1,5 @@
 import
+    sets,
     algorithm,
     streams
 
@@ -28,23 +29,20 @@ proc stream*[T](channel: var Channel[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     var chptr = channel.addr
     result.it = iterator(): T =
-        while chptr[].peek() != -1:
-            yield chptr[].recv
+        while chptr[].peek() != -1: yield chptr[].recv
 
 
 proc stream*(iterable: Stream): Iterable[string] {.inline.} =
     ## Creates an iterator from possible sources
     var line = ""
     result.it = iterator(): string =
-        while iterable.readLine(line):
-            yield line
+        while iterable.readLine(line): yield line
 
 
 proc stream*[T](iterable: seq[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     result.it = iterator(): T =
-        for it in iterable:
-            yield it
+        for it in iterable: yield it
 
 
 proc stream*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
@@ -92,8 +90,7 @@ proc sort*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
         values.add it
     algorithm.sort(values, cmp[T])
     result.it = iterator: T {.closure.} =
-        for it in values:
-            yield it
+        for it in values: yield it
 
 
 proc map*[T, G](iterable: Iterable[T], op: proc(a: T): G {.closure.}): Iterable[G] {.inline.} =
@@ -107,32 +104,28 @@ proc filter*[T](iterable: Iterable[T], val: T): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if it == val:
-                yield it
+            if it == val: yield it
 
 
 proc filter*[T](iterable: Iterable[T], op: proc(a: T): bool {.closure.}): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if op(it):
-                yield it
+            if op(it): yield it
 
 
 proc reject*[T](iterable: Iterable[T], op: proc(a: T): bool {.closure.}): Iterable[T] {.inline.} =
     ## Rejects elements in stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if not op(it):
-                yield it
+            if not op(it): yield it
 
 
 proc reject*[T](iterable: Iterable[T], val: T): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if not it == val:
-                yield it
+            if not it == val: yield it
 
 
 proc reduce*[T, G](iterable: Iterable[T], acc: G, op: proc(acc: G, next: T): G): G {.inline.} =
@@ -148,8 +141,7 @@ proc take*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
     var value = amount
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if value == 0:
-                return
+            if value == 0: return
             else:
                 dec value
                 yield it
@@ -227,12 +219,20 @@ proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
 proc concat*[T](a, b: Iterable[T]): Iterable[T] {.inline.} =
     assert a.isInfinite == false
     result.it = iterator: T {.closure.} =
-        iterate a:
-            yield it
-        iterate b:
-            yield it
+        iterate a: yield it
+        iterate b: yield it
 
 
-# proc unique*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+proc unique*[T](iterable: Iterable[T]): Iterable[T] =
+    ## Passes only unique values trough
+    ## ``Warning: O(n) more memory needed``
+    var uniqvals = initSet[T]()
+    result.it = iterator: T {.closure.} =
+        iterate iterable:
+            if uniqvals.containsOrIncl(it): continue
+            else: yield it
+
+
+
 # proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
 # proc groupBy*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"

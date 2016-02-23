@@ -38,6 +38,13 @@ test "tail":
             .head() == 1
 
 
+test "unique":
+    check:
+        @[1,1,2,3,2].stream()
+            .unique()
+            .collect == @[1,2,3]
+
+
 test "concat":
     check:
         infinity()
