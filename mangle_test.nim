@@ -38,6 +38,14 @@ test "tail":
             .head() == 1
 
 
+test "concat":
+    check:
+        infinity()
+            .take(3)
+            .concat(infinity().take(3))
+            .collect == @[0,1,2,0,1,2]
+
+
 test "some":
     check:
         infinity()

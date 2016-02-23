@@ -224,7 +224,15 @@ proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
     return false
 
 
-proc unique*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc concat*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc groupBy*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+proc concat*[T](a, b: Iterable[T]): Iterable[T] {.inline.} =
+    assert a.isInfinite == false
+    result.it = iterator: T {.closure.} =
+        iterate a:
+            yield it
+        iterate b:
+            yield it
+
+
+# proc unique*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+# proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+# proc groupBy*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
