@@ -203,6 +203,7 @@ proc tail*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
 
 
 proc all*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
+    ## Checks that all elements in iterable satisfy predicate
     assert iterable.isInfinite == false
     iterate iterable:
         if not pred(it): return false
@@ -210,13 +211,15 @@ proc all*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
 
 
 proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
+    ## Checks that some elements in iterable satisfy predicate
     assert iterable.isInfinite == false
     iterate iterable:
         if pred(it): return true
-    return false
-
+    return false 
 
 proc concat*[T](a, b: Iterable[T]): Iterable[T] {.inline.} =
+    ## Concats two iterables
+    ## Nim is unable to capture varargs so this will have to do
     assert a.isInfinite == false
     result.it = iterator: T {.closure.} =
         iterate a: yield it
@@ -231,7 +234,6 @@ proc unique*[T](iterable: Iterable[T]): Iterable[T] =
         iterate iterable:
             if uniqvals.containsOrIncl(it): continue
             else: yield it
-
 
 
 # proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"

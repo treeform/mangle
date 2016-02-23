@@ -1,3 +1,7 @@
+task docs, "":
+    exec "nim doc --threads:on mangle.nim"
+    setCommand "nop"
+
 task build, "":
     exec "nim c --threads:on -d:release mangle.nim"
     setCommand "nop"
