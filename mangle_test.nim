@@ -25,10 +25,49 @@ test "Real usage":
             .collect == @[0, 2, 4, 6]
 
 
-# test "Infinity cannot be sorted or collected":
-#     check:
-#         not compiles(infinity().sort)
-#         not compiles(infinity().collect)
+test "head":
+    check:
+        infinity().head() == 0
+
+
+test "tail":
+    check:
+        infinity()
+            .tail()
+            .take(1)
+            .head() == 1
+
+
+test "some":
+    check:
+        infinity()
+            .drop(3)
+            .take(999)
+            .some((x) => x == 666) == true
+
+
+test "all":
+    check:
+        infinity()
+            .drop(3)
+            .take(999)
+            .all((x) => x > 2) == true
+
+
+test "reverse":
+    check:
+        infinity()
+            .take(3)
+            .reverse()
+            .collect == @[2,1,0]
+
+
+test "drop":
+    check:
+        infinity()
+            .drop(3)
+            .take(3)
+            .collect == @[3,4,5]
 
 
 test "zip":

@@ -145,8 +145,8 @@ proc reduce*[T, G](iterable: Iterable[T], acc: G, op: proc(acc: G, next: T): G):
 
 proc take*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
     ## Takes ``amount`` of elements from the stream returnin a new iterator
+    var value = amount
     result.it = iterator: T {.closure.} =
-        var value = amount
         iterate iterable:
             if value == 0:
                 return
@@ -179,13 +179,52 @@ proc zip*[A, B](a: Iterable[A], b: Iterable[B]): Iterable[(A, B)] {.inline.} =
             yield x
 
 
+proc drop*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
+    ## Drops ``amount`` from the iterable
+    var value = amount
+    result.it = iterator: T {.closure.} =
+        iterate iterable:
+            if value == 0: yield it
+            else: dec value
 
-proc reverse*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
+
+proc reverse*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
+    ## Reverses all in seq
+    assert iterable.isInfinite == false
+    var values: seq[T] = @[];
+    iterate iterable: values.add it
+    algorithm.reverse(values)
+    result.it = iterator: T {.closure.} =
+        for it in values:
+            yield it
+
+
+proc head*[T](iterable: Iterable[T]): T =
+    ## Returns the first value of a stream
+    return iterable.it()
+
+
+proc tail*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
+    ## Drops first item from the iterable
+    discard iterable.it()
+    return iterable
+
+
+proc all*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
+    assert iterable.isInfinite == false
+    iterate iterable:
+        if not pred(it): return false
+    return true
+
+
+proc some*[T](iterable: Iterable[T], pred: proc(x: T): bool): bool =
+    assert iterable.isInfinite == false
+    iterate iterable:
+        if pred(it): return true
+    return false
+
+
 proc unique*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc head*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc tail*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
 proc concat*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
 proc zipTable*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
 proc groupBy*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc some*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
-proc all*[T](iterable: Iterable[T]): iterator: T = quit "Not implemented yet"
