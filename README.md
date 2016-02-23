@@ -31,7 +31,8 @@ infinity()
         .mapIt(it * 2)
         .take(42))
     .unique
-    .reduceIt(0, acc + it) == 1618153796826
+    .reduceIt(0, acc + it)
+    .echo # == 1618153796826
 ```
 
 # Documentation
