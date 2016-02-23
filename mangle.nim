@@ -181,6 +181,15 @@ proc zip*[A, B](a: Iterable[A], b: Iterable[B]): Iterable[(A, B)] {.inline.} =
             yield x
 
 
+proc drop*[T](iterable: Iterable[T], pred: proc(x: T): bool): Iterable[T] {.inline.} =
+    ## Drops while predicate is truthful
+    var done = false
+    result.it = iterator: T {.closure.} =
+        iterate iterable:
+            if not done and pred(it): continue
+            else: yield it
+
+
 proc drop*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
     ## Drops ``amount`` from the iterable
     var value = amount
@@ -268,6 +277,10 @@ template allIt*(iterable, body: expr): expr {.immediate.} =
 template someIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of some
     templateImpl(some, iterable, body)
+
+template dropIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of some
+    templateImpl(drop, iterable, body)
 
 template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
     ## Iterator version of reduce

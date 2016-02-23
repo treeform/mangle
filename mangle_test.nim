@@ -104,6 +104,11 @@ test "reverse":
 test "drop":
     check:
         infinity()
+            .dropIt(it < 5)
+            .take(3)
+            .collect == @[5,6,7]
+
+        infinity()
             .drop(3)
             .take(3)
             .collect == @[3,4,5]
