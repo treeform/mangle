@@ -15,6 +15,17 @@ test "Multiple stream ok":
     check: helper == helper.stream.stream.collect
 
 
+test "generator":
+    check:
+        stream(() => 1)
+            .take(3)
+            .collect == @[1, 1, 1]
+        stream((idx) => idx / 2)
+            .map((it) => it.int)
+            .take(4)
+            .collect == @[0, 0, 1, 1]
+
+
 test "Real usage":
     check:
         infinity()
@@ -36,6 +47,13 @@ test "tail":
             .tail()
             .take(1)
             .head() == 1
+
+
+# test "map":
+#     check:
+#         @[1f, 2f].stream()
+#             .map(int)
+#             .collect == @[1,2,3]
 
 
 test "unique":

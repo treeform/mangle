@@ -30,6 +30,21 @@ proc stream*(iterable: Stream): Iterable[string] {.inline.} =
         while iterable.readLine(line): yield line
 
 
+proc stream*[T](generator: proc(): T): Iterable[T] {.inline.} =
+    ## Creates an iterator from possible sources
+    result.it = iterator(): T =
+        while true: yield generator()
+
+
+proc stream*[T](generator: proc(idx: int): T): Iterable[T] {.inline.} =
+    ## Creates an iterator from possible sources
+    var idx = 0
+    result.it = iterator(): T =
+        while true:
+            yield generator(idx)
+            inc idx
+
+
 proc stream*[T](iterable: seq[T]): Iterable[T] {.inline.} =
     ## Creates an iterator from possible sources
     result.it = iterator(): T =
@@ -66,8 +81,7 @@ proc sort*[T](iterable: Iterable[T], cmpfn: proc(a, b: T): int {.closure.}): Ite
         values.add it
     algorithm.sort(values, cmpfn)
     result.it = iterator: T {.closure.} =
-        for it in values:
-            yield it
+        for it in values: yield it
 
 
 proc sort*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
@@ -80,11 +94,16 @@ proc sort*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
         for it in values: yield it
 
 
+# proc map*[T](iterable: Iterable[T], t: typedesc): Iterable[t] {.inline.} =
+#     ## Transforms single valuable in the stream
+#     result.it = iterator: t {.closure.} =
+#         iterate iterable: yield (t.type)it
+
+
 proc map*[T, G](iterable: Iterable[T], op: proc(a: T): G {.closure.}): Iterable[G] {.inline.} =
     ## Transforms single valuable in the stream
     result.it = iterator: G {.closure.} =
-        iterate iterable:
-            yield op(it)
+        iterate iterable: yield op(it)
 
 
 proc filter*[T](iterable: Iterable[T], val: T): Iterable[T] {.inline.} =
