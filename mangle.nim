@@ -286,7 +286,7 @@ template someIt*(iterable, body: expr): expr {.immediate.} =
     templateImpl(some, iterable, body)
 
 template dropIt*(iterable, body: expr): expr {.immediate.} =
-    ## Iterator version of some
+    ## Iterator version of drop
     templateImpl(drop, iterable, body)
 
 template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
