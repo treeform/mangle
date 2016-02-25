@@ -24,6 +24,7 @@ test "generate":
             .take(4)
             .collect == @[0, 0, 1, 1]
 
+
 test "head":
     check:
         infinity().head == 0
@@ -110,6 +111,16 @@ test "drop":
             .drop(3)
             .take(3)
             .collect == @[3,4,5]
+
+
+test "each":
+    var arr = newSeq[int]()
+    infinity()
+        .mapIt(it * 2)
+        .take(3)
+        .eachIt(arr.add it)
+
+    check: arr == @[0, 2, 4]
 
 
 test "zip":

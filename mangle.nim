@@ -114,35 +114,46 @@ proc map*[T](iterable: Iterable[T], G: typedesc): Iterable[G] {.inline.} =
 proc map*[T, G](iterable: Iterable[T], op: proc(a: T): G {.closure.}): Iterable[G] {.inline.} =
     ## Transforms single valuable in the stream
     result.it = iterator: G {.closure.} =
-        iterate iterable: yield op(it)
+        iterate iterable:
+            yield op(it)
+
+
+proc each*[T](iterable: Iterable[T], op: proc(a: T) {.closure.}) {.inline.} =
+    ## Passes through all values terminating the stream
+    iterate iterable:
+        op(it)
 
 
 proc filter*[T](iterable: Iterable[T], val: T): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if it == val: yield it
+            if it == val:
+                yield it
 
 
 proc filter*[T](iterable: Iterable[T], op: proc(a: T): bool {.closure.}): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if op(it): yield it
+            if op(it):
+                yield it
 
 
 proc reject*[T](iterable: Iterable[T], op: proc(a: T): bool {.closure.}): Iterable[T] {.inline.} =
     ## Rejects elements in stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if not op(it): yield it
+            if not op(it):
+                yield it
 
 
 proc reject*[T](iterable: Iterable[T], val: T): Iterable[T] {.inline.} =
     ## Filters elements stream by op
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if not it == val: yield it
+            if not it == val:
+                yield it
 
 
 proc reduce*[T, G](iterable: Iterable[T], acc: G, op: proc(acc: G, next: T): G): G {.inline.} =
@@ -202,8 +213,10 @@ proc drop*[T](iterable: Iterable[T], amount: int): Iterable[T] {.inline.} =
     var value = amount
     result.it = iterator: T {.closure.} =
         iterate iterable:
-            if value == 0: yield it
-            else: dec value
+            if value == 0:
+                yield it
+            else:
+                dec value
 
 
 proc reverse*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
@@ -288,6 +301,12 @@ template someIt*(iterable, body: expr): expr {.immediate.} =
 template dropIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of drop
     templateImpl(drop, iterable, body)
+
+template eachIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of each
+    each(iterable, proc(itx: auto) =
+        let it {.inject.} = itx
+        body)
 
 template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
     ## Iterator version of reduce
