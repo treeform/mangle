@@ -1197,6 +1197,8 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="map*[T](iterable: Iterable[T]; G: typedesc): Iterable[G]"><wbr />map</a></li>
   <li><a class="reference" href="#map,Iterable[T],proc(T)"
     title="map*[T, G](iterable: Iterable[T]; op: proc (a: T): G): Iterable[G]"><wbr />map</a></li>
+  <li><a class="reference" href="#each,Iterable[T],proc(T)"
+    title="each*[T](iterable: Iterable[T]; op: proc (a: T))"><wbr />each</a></li>
   <li><a class="reference" href="#filter,Iterable[T],T"
     title="filter*[T](iterable: Iterable[T]; val: T): Iterable[T]"><wbr />filter</a></li>
   <li><a class="reference" href="#filter,Iterable[T],proc(T)"
@@ -1233,6 +1235,8 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="concat*[T](a, b: Iterable[T]): Iterable[T]"><wbr />concat</a></li>
   <li><a class="reference" href="#unique,Iterable[T]"
     title="unique*[T](iterable: Iterable[T]): Iterable[T]"><wbr />unique</a></li>
+  <li><a class="reference" href="#invoke,Iterable[T]"
+    title="invoke*[T](iterable: var Iterable[T]): T"><wbr />invoke</a></li>
 
   </ul>
 </li>
@@ -1251,6 +1255,10 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="someIt*(iterable, body: expr): expr"><wbr />some<wbr />It</a></li>
   <li><a class="reference" href="#dropIt.t,expr,expr"
     title="dropIt*(iterable, body: expr): expr"><wbr />drop<wbr />It</a></li>
+  <li><a class="reference" href="#tapIt.t,expr,expr"
+    title="tapIt*(iterable, body: expr): expr"><wbr />tap<wbr />It</a></li>
+  <li><a class="reference" href="#eachIt.t,expr,expr"
+    title="eachIt*(iterable, body: expr): expr"><wbr />each<wbr />It</a></li>
   <li><a class="reference" href="#reduceIt.t,expr,expr,expr"
     title="reduceIt*(iterable, initial, body: expr): expr"><wbr />reduce<wbr />It</a></li>
   <li><a class="reference" href="#sortIt.t,expr,expr"
@@ -1351,6 +1359,11 @@ Transforms the type
 Transforms single valuable in the stream
 
 </dd>
+<dt id="each"><a name="each,Iterable[T],proc(T)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">each</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">op</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">closure</span><span class="Other">.}</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+Passes through all values terminating the stream
+
+</dd>
 <dt id="filter"><a name="filter,Iterable[T],T"></a><pre><span class="Keyword">proc</span> <span class="Identifier">filter</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 Filters elements stream by op
@@ -1390,7 +1403,7 @@ Prints all passing values in the stream
 </dd>
 <dt id="tap"><a name="tap,Iterable[T],proc(T)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">tap</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">op</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">closure</span><span class="Other">.}</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
-Allows to check on the immutable alues in the stream
+Allows to check on the immutable values in the stream
 
 </dd>
 <dt id="zip"><a name="zip,Iterable[A],Iterable[B]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">zip</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">,</span> <span class="Identifier">B</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">B</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Other">(</span><span class="Identifier">A</span><span class="Other">,</span> <span class="Identifier">B</span><span class="Other">)</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
@@ -1443,6 +1456,11 @@ Concats two iterables Nim is unable to capture varargs so this will have to do
 Passes only unique values trough <tt class="docutils literal"><span class="pre">Warning: O(n) more memory needed</span></tt>
 
 </dd>
+<dt id="invoke"><a name="invoke,Iterable[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">invoke</span><span class="Operator">*</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">Iterable</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dd>
+
+
+</dd>
 
 </dl></div>
 <div class="section" id="17">
@@ -1478,6 +1496,16 @@ Iterator version of some
 Iterator version of drop
 
 </dd>
+<dt id="tapIt"><a name="tapIt.t,expr,expr"></a><pre><span class="Keyword">template</span> <span class="Identifier">tapIt</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">expr</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span> <span class="Other">{.</span><span class="Identifier">immediate</span><span class="Other">.}</span></pre></dt>
+<dd>
+Iterator version of tap
+
+</dd>
+<dt id="eachIt"><a name="eachIt.t,expr,expr"></a><pre><span class="Keyword">template</span> <span class="Identifier">eachIt</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">expr</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span> <span class="Other">{.</span><span class="Identifier">immediate</span><span class="Other">.}</span></pre></dt>
+<dd>
+Iterator version of each
+
+</dd>
 <dt id="reduceIt"><a name="reduceIt.t,expr,expr,expr"></a><pre><span class="Keyword">template</span> <span class="Identifier">reduceIt</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">iterable</span><span class="Other">,</span> <span class="Identifier">initial</span><span class="Other">,</span> <span class="Identifier">body</span><span class="Other">:</span> <span class="Identifier">expr</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span> <span class="Other">{.</span><span class="Identifier">immediate</span><span class="Other">.}</span></pre></dt>
 <dd>
 Iterator version of reduce <tt class="docutils literal"><span class="pre">.reduceIt(0, acc + it)</span></tt>
@@ -1498,7 +1526,7 @@ Iterator version of sort <tt class="docutils literal"><span class="pre">.sortIt(
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2016-02-24 00:38:01 UTC</small>
+        <small>Made with Nim. Generated: 2016-02-25 08:11:44 UTC</small>
       </div>
     </div>
   </div>
