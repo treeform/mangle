@@ -1,35 +1,3 @@
-Mangle [![Build Status](https://travis-ci.org/baabelfish/mangle.svg?branch=master)](https://travis-ci.org/baabelfish/mangle)
-======
-
-> to injure severely, disfigure, or mutilate by cutting, slashing, or crushing
-
-Attempt at a streaming lib
-
-# Examples
-
-- Simple playing around
-
-```nim
-import
-    mangle
-
-infinity()
-    .drop(1337)
-    .mapIt(it * it)
-    .filterIt(it %% 2 == 0)
-    .take(9999)
-    .concat(infinity()
-        .drop(2000)
-        .mapIt(it * 2)
-        .take(42))
-    .unique
-    .reduceIt(0, acc + it)
-    .echo # == 1618153796826
-```
-
-- Downloading football and hockey information and concatenating it
-
-```nim
 import
     httpclient,
     json,
@@ -70,10 +38,8 @@ proc getIcehockeyTeams(): auto =
                 .join(", ")))
 
 
-# Make a lazy generator of team names
 var idGenerator = infinity().drop(1).mapIt("Tiimit " & $it)
 
-# Combine football and hockey
 zip(getFootballTeams(), getIcehockeyTeams())
     .mapIt((
         id: idGenerator.invoke,
@@ -86,8 +52,3 @@ zip(getFootballTeams(), getIcehockeyTeams())
 # (id: Tiimit 2, football: (id: "WOB", name: "Wolfsburg"), hockey: (id: ARI, name: Arizona Coyotes, seasons: 20112012, 20122013, 20132014, 20142015))     
 # (id: Tiimit 3, football: (id: "SGE", name: "Eintr. Frankfurt"), hockey: (id: BOS, name: Boston Bruins, seasons: 20112012, 20122013, 20132014, 20142015))
 # ...
-
-```
-
-# Documentation
-[Generated nimdoc](https://htmlpreview.github.io/?https://raw.githubusercontent.com/baabelfish/mangle/master/mangle.html)

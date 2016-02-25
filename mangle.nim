@@ -184,7 +184,7 @@ proc print*[T](iterable: Iterable[T]): Iterable[T] {.inline.} =
 
 
 proc tap*[T](iterable: Iterable[T], op: proc(a: T) {.closure.}): Iterable[T] {.inline.} =
-    ## Allows to check on the immutable alues in the stream
+    ## Allows to check on the immutable values in the stream
     result.it = iterator: T {.closure.} =
         iterate iterable:
             op(it)
@@ -194,7 +194,7 @@ proc tap*[T](iterable: Iterable[T], op: proc(a: T) {.closure.}): Iterable[T] {.i
 proc zip*[A, B](a: Iterable[A], b: Iterable[B]): Iterable[(A, B)] {.inline.} =
     result.it = iterator: (A, B) {.closure.} =
         while true:
-            let x = (a: a.it(), b: b.it())
+            let x = (a.it(), b.it())
             if finished(a.it) or finished(b.it): break
             yield x
 
@@ -271,6 +271,10 @@ proc unique*[T](iterable: Iterable[T]): Iterable[T] =
             else: yield it
 
 
+proc invoke*[T](iterable: var Iterable[T]): T =
+    iterable.it()
+
+
 template templateImpl(name, iterable, body: expr): expr {.immediate.} =
     name(iterable, proc(itx: auto): auto =
         let it {.inject.} = itx
@@ -282,31 +286,45 @@ template mapIt*(iterable, body: expr): expr {.immediate.} =
     ## ``mapIt(it * 2)`` expands to ``map((it) => it * 2)``
     templateImpl(map, iterable, body)
 
+
 template filterIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of filter
     templateImpl(filter, iterable, body)
+
 
 template rejectIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of reject
     templateImpl(reject, iterable, body)
 
+
 template allIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of all
     templateImpl(all, iterable, body)
+
 
 template someIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of some
     templateImpl(some, iterable, body)
 
+
 template dropIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of drop
     templateImpl(drop, iterable, body)
+
+
+template tapIt*(iterable, body: expr): expr {.immediate.} =
+    ## Iterator version of tap
+    tap(iterable, proc(itx: auto) =
+        let it {.inject.} = itx
+        body)
+
 
 template eachIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of each
     each(iterable, proc(itx: auto) =
         let it {.inject.} = itx
         body)
+
 
 template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
     ## Iterator version of reduce
@@ -315,6 +333,7 @@ template reduceIt*(iterable, initial, body: expr): expr {.immediate.} =
         let acc {.inject.} = accx
         let it {.inject.} = itx
         body))
+
 
 template sortIt*(iterable, body: expr): expr {.immediate.} =
     ## Iterator version of sort
