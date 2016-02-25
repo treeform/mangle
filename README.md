@@ -24,7 +24,7 @@ infinity()
         .take(42))
     .unique
     .reduceIt(0, acc + it)
-    .echo # == 1618153796826
+    .echo # 1618153964826
 ```
 
 - Downloading football and hockey information and concatenating it

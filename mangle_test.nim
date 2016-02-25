@@ -143,21 +143,11 @@ test "Example":
             .filterIt(it %% 2 == 0)
             .take(9999)
             .concat(infinity()
+                .drop(2000)
                 .mapIt(it * 2)
                 .take(42))
             .unique
-            .reduceIt(0, acc + it) == 1618153796826
-
-        infinity()
-            .drop(1337)
-            .map((it) => it * it)
-            .filter((it) => it %% 2 == 0)
-            .take(9999)
-            .concat(infinity()
-                .map((it) => it * 2)
-                .take(42))
-            .unique
-            .reduce(0, (acc, it) => acc + it) == 1618153796826
+            .reduceIt(0, acc + it) == 1618153964826
 
 
 test "More complex types":
