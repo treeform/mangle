@@ -42,7 +42,7 @@ proc getTeamData(api: string): auto =
 
 
 proc getFootballTeams(): auto =
-    proc get(node: JsonNode, key: string): JsonNode = node[key]
+    proc get(node: JsonNode, key: string): JsonNode = node[key] # This should really be in the json module
     getTeamData("http://api.football-data.org/v1/soccerseasons/351/teams")
         .get("teams")
         .getElems
@@ -71,7 +71,9 @@ proc getIcehockeyTeams(): auto =
 
 
 # Make a lazy generator of team names
-var idGenerator = infinity().drop(1).mapIt("Tiimit " & $it)
+var idGenerator = infinity()
+    .drop(1)
+    .mapIt("Tiimit " & $it)
 
 # Combine football and hockey
 zip(getFootballTeams(), getIcehockeyTeams())
